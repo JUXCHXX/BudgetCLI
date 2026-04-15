@@ -1,111 +1,111 @@
-# Changelog
+# Registro de Cambios
 
-All notable changes to this project will be documented in this file.
+Todos los cambios notables de este proyecto serán documentados en este archivo.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+El formato se basa en [Mantener un Changelog](https://keepachangelog.com/es/1.0.0/),
+y este proyecto adhiere a [Versionamiento Semántico](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2026-04-15
 
-### Added
+### Agregado
 
-- Initial release of BudgetCLI
-- Transaction management (income/expense tracking)
-- Budget management with monthly limits
-- Monthly expense reports with Rich tables
-- ASCII bar charts for data visualization
-- Financial summaries (income, expenses, balance)
-- CSV and JSON export functionality
-- PNG chart generation with matplotlib
-- SQLite persistent storage
-- Comprehensive validation system
-- Full test suite with >80% coverage
-- Professional CLI interface with Typer
-- Rich terminal formatting with colors and panels
+- Lanzamiento inicial de BudgetCLI
+- Gestión de transacciones (seguimiento de ingresos/gastos)
+- Gestión de presupuestos con límites mensuales
+- Reportes de gastos mensuales con tablas Rich
+- Gráficos ASCII de barras para visualización de datos
+- Resúmenes financieros (ingresos, gastos, balance)
+- Funcionalidad de exportación CSV y JSON
+- Generación de gráficos PNG con matplotlib
+- Almacenamiento persistente SQLite
+- Sistema de validación completo
+- Suite de pruebas completa con cobertura >80%
+- Interfaz CLI profesional con Typer
+- Formato de terminal Rich con colores y paneles
 
-### Features
+### Características
 
-#### CLI Commands
+#### Comandos CLI
 
-- `budget init` - Initialize database
-- `budget transaction add` - Add transactions
-- `budget transaction list` - View transactions
-- `budget transaction delete` - Delete transactions
-- `budget budget set-budget` - Set category budgets
-- `budget budget list` - View budgets
-- `budget budget delete` - Delete budgets
-- `budget report monthly` - View monthly report
-- `budget report summary` - View financial summary
-- `budget report chart` - Display ASCII chart
-- `budget report export` - Export to CSV/JSON
-- `budget report plot` - Generate PNG charts
+- `budget init` - Inicializar base de datos
+- `budget transaction add` - Añadir transacciones
+- `budget transaction list` - Ver transacciones
+- `budget transaction delete` - Eliminar transacciones
+- `budget budget set-budget` - Establecer presupuestos por categoría
+- `budget budget list` - Ver presupuestos
+- `budget budget delete` - Eliminar presupuestos
+- `budget report monthly` - Ver reporte mensual
+- `budget report summary` - Ver resumen financiero
+- `budget report chart` - Mostrar gráfico ASCII
+- `budget report export` - Exportar a CSV/JSON
+- `budget report plot` - Generar gráficos PNG
 
-#### Database
+#### Base de Datos
 
-- Normalized SQLite schema
-- Indexed queries for performance
-- Transaction and Budget models
-- Automatic schema initialization
+- Esquema SQLite normalizado
+- Consultas indexadas para rendimiento
+- Modelos Transaction y Budget
+- Inicialización automática de esquema
 
-#### Services
+#### Servicios
 
-- `TransactionService` - Transaction management
-- `BudgetService` - Budget management
-- `ReportService` - Report generation
-- `CalculationService` - Financial calculations
+- `TransactionService` - Gestión de transacciones
+- `BudgetService` - Gestión de presupuestos
+- `ReportService` - Generación de reportes
+- `CalculationService` - Cálculos financieros
 
-#### Utilities
+#### Utilidades
 
-- `ASCIIChart` - ASCII chart generation
-- `CSVExporter` - CSV export
-- `JSONExporter` - JSON export
-- `PNGExporter` - PNG chart generation
+- `ASCIIChart` - Generación de gráficos ASCII
+- `CSVExporter` - Exportación a CSV
+- `JSONExporter` - Exportación a JSON
+- `PNGExporter` - Generación de gráficos PNG
 
-#### Validation
+#### Validación
 
-- Input validation for all data
-- Month format validation
-- Amount and budget validation
-- Type checking and error handling
+- Validación de entrada para todos los datos
+- Validación de formato de mes
+- Validación de cantidad y presupuesto
+- Verificación de tipos y manejo de errores
 
 #### Testing
 
-- `test_validators.py` - Validator tests
-- `test_calculations.py` - Calculation tests
-- `test_services.py` - Service tests
-- `test_exporters.py` - Exporter tests
-- Pytest configuration and fixtures
+- `test_validators.py` - Pruebas de validadores
+- `test_calculations.py` - Pruebas de cálculos
+- `test_services.py` - Pruebas de servicios
+- `test_exporters.py` - Pruebas de exportadores
+- Configuración de pytest y fixtures
 
-### Documentation
+### Documentación
 
-- Comprehensive README.md
-- Contributing guidelines
-- Architecture documentation
-- API docstrings
-- Usage examples
+- README.md completo
+- Directrices de contribución
+- Documentación de arquitectura
+- Docstrings de API
+- Ejemplos de uso
 
 ---
 
-## Planned Releases
+## Lanzamientos Planeados
 
-### [1.1.0] - TBD
+### [1.1.0] - Por Determinar
 
-- Recurring transactions
-- Budget alerts
-- Multi-currency support
-- Data import functionality
-- Advanced filtering options
+- Transacciones recurrentes
+- Alertas de presupuesto
+- Soporte de múltiples monedas
+- Funcionalidad de importación de datos
+- Opciones de filtrado avanzado
 
-### [1.2.0] - TBD
+### [1.2.0] - Por Determinar
 
-- Investment tracking
-- Tax report generation
-- Financial goals
-- Spending predictions
+- Seguimiento de inversiones
+- Generación de reportes fiscales
+- Objetivos financieros
+- Predicción de gastos
 
-### [2.0.0] - TBD
+### [2.0.0] - Por Determinar
 
-- Web dashboard
-- Mobile app
-- Cloud sync
-- Bank integration
+- Dashboard web
+- Aplicación móvil
+- Sincronización en la nube
+- Integración bancaria

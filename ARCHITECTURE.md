@@ -1,76 +1,76 @@
-# BudgetCLI Architecture
+# Arquitectura de BudgetCLI
 
-## Overview
+## Resumen General
 
-BudgetCLI follows **Clean Architecture** principles to ensure maintainability, testability, and scalability. The application is organized into distinct layers with clear responsibilities.
+BudgetCLI sigue los principios de **Arquitectura Limpia** para garantizar mantenibilidad, testeabilidad y escalabilidad. La aplicación está organizada en capas distintas con responsabilidades claras.
 
-## Architecture Diagram
+## Diagrama de Arquitectura
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    CLI Layer (Typer)                     │
-│              (User Input/Output Handling)                │
+│                  Capa CLI (Typer)                        │
+│        (Manejo de Entrada/Salida del Usuario)           │
 │  ┌──────────────┬──────────────┬──────────────┐          │
-│  │transactions  │    budgets   │    reports   │          │
+│  │transacciones │  presupuestos│   reportes   │          │
 │  └──────────────┴──────────────┴──────────────┘          │
 └──────────────────────┬──────────────────────────────────┘
                        │
 ┌──────────────────────▼──────────────────────────────────┐
-│           Business Logic Layer (Core)                    │
-│     (No External Dependencies, Pure Logic)              │
+│        Capa de Lógica de Negocio (Core)                 │
+│   (Sin Dependencias Externas, Lógica Pura)             │
 │  ┌──────────────┬──────────────┬──────────────┐         │
-│  │  Services    │Calculations  │  Validators  │         │
+│  │   Servicios  │ Cálculos     │  Validadores │         │
 │  └──────────────┴──────────────┴──────────────┘         │
 └──────────────────────┬──────────────────────────────────┘
                        │
 ┌──────────────────────▼──────────────────────────────────┐
-│           Data Access Layer (Database)                   │
-│            (SQLite, Models, Migrations)                 │
+│        Capa de Acceso a Datos (Base de Datos)           │
+│      (SQLite, Modelos, Migraciones)                     │
 │  ┌──────────────┬──────────────┬──────────────┐         │
-│  │ Connection   │    Models    │ Migrations   │         │
+│  │  Conexión    │    Modelos   │  Migraciones │         │
 │  └──────────────┴──────────────┴──────────────┘         │
 └──────────────────────┬──────────────────────────────────┘
                        │
 ┌──────────────────────▼──────────────────────────────────┐
-│                   SQLite Database                        │
-│      (Persistent Data Storage on File System)           │
+│               Base de Datos SQLite                       │
+│    (Almacenamiento Persistente en Sistema de Archivos) │
 └──────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────┐
-│                Utilities Layer (Utils)                    │
-│           (Charts, Exporters, Helpers)                  │
+│            Capa de Utilidades (Utils)                    │
+│       (Gráficos, Exportadores, Ayudantes)              │
 │  ┌──────────────┬──────────────┐                        │
-│  │ASCIIChart    │  Exporters   │                        │
+│  │ Gráficos ASCII│ Exportadores │                        │
 │  │(CSV, JSON)   │  (PNG)       │                        │
 │  └──────────────┴──────────────┘                        │
 └──────────────────────────────────────────────────────────┘
 ```
 
-## Layers in Detail
+## Capas en Detalle
 
-### 1. CLI Layer (Presentation)
+### 1. Capa CLI (Presentación)
 
-**Location:** `budgetcli/cli/`
+**Ubicación:** `budgetcli/cli/`
 
-**Responsibility:** Handle user input and output
+**Responsabilidad:** Manejar entrada y salida del usuario
 
-**Contains:**
-- `main.py` - Application entry point and setup
-- `transactions.py` - Transaction commands
-- `budgets.py` - Budget commands
-- `reports.py` - Report and export commands
+**Contiene:**
+- `main.py` - Punto de entrada de la aplicación
+- `transactions.py` - Comandos de transacciones
+- `budgets.py` - Comandos de presupuestos
+- `reports.py` - Comandos de reportes y exportación
 
-**Key Principles:**
-- No business logic or calculations
-- Only orchestrates services
-- Uses Rich for terminal formatting
-- Uses Typer for CLI framework
-- All input validation delegated to services
+**Principios Clave:**
+- Sin lógica de negocio o cálculos
+- Solo orquesta servicios
+- Usa Rich para formato de terminal
+- Usa Typer como framework CLI
+- Toda validación delegada a servicios
 
-**Example:**
+**Ejemplo:**
 
 ```python
-# CLI only orchestrates - no logic
+# CLI solo orquesta - sin lógica
 @app.command("add")
 def add_transaction(
     type: str = typer.Option(...),
@@ -78,37 +78,37 @@ def add_transaction(
     amount: float = typer.Option(...),
     date_str: str = typer.Option(...),
 ):
-    """Add transaction (just orchestrate the service)"""
+    """Añadir transacción (solo orquestar el servicio)"""
     try:
         transaction_service = TransactionService()
         transaction = transaction_service.add_transaction(
             type, category, amount, date_str
         )
-        console.print(f"[green]✓[/green] Added: {transaction}")
+        console.print(f"[green]✓[/green] Añadido: {transaction}")
     except ValidationError as e:
         console.print(f"[red]✗[/red] {e}")
 ```
 
-### 2. Core Business Logic Layer
+### 2. Capa de Lógica de Negocio (Core)
 
-**Location:** `budgetcli/core/`
+**Ubicación:** `budgetcli/core/`
 
-**Responsibility:** All business logic and domain operations
+**Responsabilidad:** Toda lógica de negocio y operaciones de dominio
 
-#### 2.1 Services (`services.py`)
+#### 2.1 Servicios (`services.py`)
 
-**Entities:**
-- `TransactionService` - Manage transactions (add, get, delete)
-- `BudgetService` - Manage budgets (set, get, delete)
-- `ReportService` - Generate reports
+**Entidades:**
+- `TransactionService` - Gestionar transacciones (añadir, obtener, eliminar)
+- `BudgetService` - Gestionar presupuestos (establecer, obtener, eliminar)
+- `ReportService` - Generar reportes
 
-**Characteristics:**
-- Independent of framework or infrastructure
-- Pure Python business logic
-- Testable without external dependencies
-- Handle database orchestration
+**Características:**
+- Independiente del framework o infraestructura
+- Lógica Python pura de negocio
+- Testeable sin dependencias externas
+- Manejan orquestación de base de datos
 
-**Example:**
+**Ejemplo:**
 
 ```python
 class TransactionService:
@@ -119,33 +119,33 @@ class TransactionService:
         amount: float,
         date: str,
     ) -> Transaction:
-        # Validate input
+        # Validar entrada
         TransactionValidator.validate_all_transaction_fields(...)
 
-        # Persist data
+        # Persistir datos
         db = DatabaseConnection()
         cursor.execute("INSERT INTO transactions...")
 
-        # Return domain object
+        # Retornar objeto de dominio
         return Transaction(...)
 ```
 
-#### 2.2 Calculations (`calculations.py`)
+#### 2.2 Cálculos (`calculations.py`)
 
-**Responsibility:** Financial calculations
+**Responsabilidad:** Cálculos financieros
 
-**Contains:**
-- Monthly totals calculation
-- Income/expense summaries
-- Budget overflow detection
-- Currency formatting
+**Contiene:**
+- Cálculo de totales mensuales
+- Resúmenes de ingresos/gastos
+- Detección de exceso de presupuesto
+- Formato de moneda
 
-**Characteristics:**
-- Pure functions (no side effects)
-- Operates on in-memory data
-- High test coverage
+**Características:**
+- Funciones puras (sin efectos secundarios)
+- Opera con datos en memoria
+- Cobertura de pruebas alta
 
-**Example:**
+**Ejemplo:**
 
 ```python
 class CalculationService:
@@ -156,21 +156,21 @@ class CalculationService:
         return income - expenses
 ```
 
-#### 2.3 Validators (`validators.py`)
+#### 2.3 Validadores (`validators.py`)
 
-**Responsibility:** Input validation and error handling
+**Responsabilidad:** Validación de entrada y manejo de errores
 
-**Contains:**
-- `TransactionValidator` - Validate transaction data
-- `BudgetValidator` - Validate budget data
-- Custom `ValidationError` exception
+**Contiene:**
+- `TransactionValidator` - Validar datos de transacciones
+- `BudgetValidator` - Validar datos de presupuestos
+- Excepción personalizada `ValidationError`
 
-**Characteristics:**
-- Centralized validation logic
-- Clear error messages
-- Type-safe validation
+**Características:**
+- Lógica de validación centralizada
+- Mensajes de error claros
+- Validación type-safe
 
-**Example:**
+**Ejemplo:**
 
 ```python
 class TransactionValidator:
@@ -178,29 +178,29 @@ class TransactionValidator:
     def validate_type(transaction_type: str) -> None:
         valid_types = {"income", "expense"}
         if transaction_type not in valid_types:
-            raise ValidationError(f"Invalid type: {transaction_type}")
+            raise ValidationError(f"Tipo inválido: {transaction_type}")
 ```
 
-### 3. Data Access Layer (Database)
+### 3. Capa de Acceso a Datos (Base de Datos)
 
-**Location:** `budgetcli/database/`
+**Ubicación:** `budgetcli/database/`
 
-**Responsibility:** Database operations and schema management
+**Responsabilidad:** Operaciones de base de datos y gestión de esquema
 
-#### 3.1 Models (`models.py`)
+#### 3.1 Modelos (`models.py`)
 
-**Contains:**
-- Domain models using Pydantic
-- `Transaction` model
-- `Budget` model
-- `MonthlySummary` model
+**Contiene:**
+- Modelos de dominio usando Pydantic
+- Modelo `Transaction`
+- Modelo `Budget`
+- Modelo `MonthlySummary`
 
-**Characteristics:**
-- Type-safe data models
-- Built-in validation
-- Serializable to JSON
+**Características:**
+- Modelos de datos type-safe
+- Validación integrada
+- Serializables a JSON
 
-**Example:**
+**Ejemplo:**
 
 ```python
 class Transaction(BaseModel):
@@ -212,271 +212,271 @@ class Transaction(BaseModel):
     note: Optional[str] = ""
 ```
 
-#### 3.2 Connection (`connection.py`)
+#### 3.2 Conexión (`connection.py`)
 
-**Contains:**
-- `DatabaseConnection` - SQLite connection management
-- `DatabaseMigration` - Schema initialization
+**Contiene:**
+- `DatabaseConnection` - Gestión de conexiones SQLite
+- `DatabaseMigration` - Inicialización de esquema
 
-**Characteristics:**
-- Context manager support
-- Thread-safe connections
-- Schema versioning ready
+**Características:**
+- Soporte para context manager
+- Conexiones thread-safe
+- Versionado de esquema listo
 
-#### 3.3 Migrations (`migrations.py`)
+#### 3.3 Migraciones (`migrations.py`)
 
-**Contains:**
-- `init_db()` - Initialize database
-- `reset_db()` - Reset database
+**Contiene:**
+- `init_db()` - Inicializar base de datos
+- `reset_db()` - Resetear base de datos
 
-**Characteristics:**
-- Idempotent operations
-- Schema versioning support
+**Características:**
+- Operaciones idempotentes
+- Soporte versionado de esquema
 
-### 4. Utilities Layer
+### 4. Capa de Utilidades
 
-**Location:** `budgetcli/utils/`
+**Ubicación:** `budgetcli/utils/`
 
-**Responsibility:** Helper functions, exporters, and utilities
+**Responsabilidad:** Funciones auxiliares, exportadores y utilidades
 
-#### 4.1 ASCII Charts (`ascii_charts.py`)
+#### 4.1 Gráficos ASCII (`ascii_charts.py`)
 
-**Contains:**
-- `ASCIIChart` - Generate ASCII bar/pie charts
+**Contiene:**
+- `ASCIIChart` - Generar gráficos ASCII de barras/pastel
 
-#### 4.2 Exporters (`exporters.py`)
+#### 4.2 Exportadores (`exporters.py`)
 
-**Contains:**
-- `CSVExporter` - Export to CSV
-- `JSONExporter` - Export to JSON
-- `PNGExporter` - Export to PNG (matplotlib)
-- Base `BaseExporter` - Common functionality
+**Contiene:**
+- `CSVExporter` - Exportar a CSV
+- `JSONExporter` - Exportar a JSON
+- `PNGExporter` - Exportar a PNG (matplotlib)
+- Base `BaseExporter` - Funcionalidad común
 
-**Characteristics:**
-- Plugin-like architecture
-- Extensible for new formats
-- Error handling
+**Características:**
+- Arquitectura tipo plugin
+- Extensible para nuevos formatos
+- Manejo de errores
 
-## Data Flow
+## Flujo de Datos
 
-### Add Transaction Flow
+### Flujo de Añadir Transacción
 
 ```
-1. User Input (CLI)
+1. Entrada del Usuario (CLI)
    └─> budget transaction add --type expense --amount 100
 
-2. CLI Command Handler
+2. Manejador de Comandos CLI
    └─> TransactionService.add_transaction()
 
-3. Validation Layer
+3. Capa de Validación
    └─> TransactionValidator.validate_all_transaction_fields()
 
-4. Business Logic
+4. Lógica de Negocio
    └─> CalculationService.calculate_monthly_totals()
 
-5. Data Access
+5. Acceso a Datos
    └─> DatabaseConnection.execute()
 
-6. SQLite Database
+6. Base de Datos SQLite
    └─> INSERT INTO transactions
 
-7. Response
-   └─> Display success/error message
+7. Respuesta
+   └─> Mostrar mensaje de éxito/error
 ```
 
-### Get Report Flow
+### Flujo de Obtener Reporte
 
 ```
-1. User Input
+1. Entrada del Usuario
    └─> budget report monthly --month 2026-04
 
-2. CLI Handler
+2. Manejador CLI
    └─> ReportService.get_monthly_summary()
 
-3. Data Retrieval
+3. Obtención de Datos
    └─> TransactionService.get_transactions_by_month()
    └─> BudgetService.get_all_budgets()
 
-4. Calculations
+4. Cálculos
    └─> CalculationService.calculate_monthly_totals()
    └─> CalculationService.check_budget_exceeded()
 
-5. Report Generation
-   └─> Create MonthlySummary objects
+5. Generación de Reporte
+   └─> Crear objetos MonthlySummary
 
-6. Presentation
-   └─> Format with Rich tables
-   └─> Display to user
+6. Presentación
+   └─> Formato con tablas Rich
+   └─> Mostrar al usuario
 ```
 
-## Design Patterns Used
+## Patrones de Diseño Utilizados
 
-### 1. Service Pattern
+### 1. Patrón Service
 - `TransactionService`, `BudgetService`, `ReportService`
-- Encapsulates business logic
-- Dependency injection ready
+- Encapsula lógica de negocio
+- Inyección de dependencias lista
 
-### 2. Repository Pattern
-- Services act as repositories
-- Abstract data access operations
-- Easy to mock for testing
+### 2. Patrón Repository
+- Los servicios actúan como repositorios
+- Abstraen operaciones de acceso a datos
+- Fácil de mockear para testing
 
-### 3. Dependency Injection
-- Services accept `db_path` parameter
-- Makes testing easy
-- Testable database path
+### 3. Inyección de Dependencias
+- Servicios aceptan parámetro `db_path`
+- Facilita testing
+- Ruta de base de datos testeable
 
-### 4. Factory Pattern
-- Model creation (Transaction, Budget)
-- Database connection creation
+### 4. Patrón Factory
+- Creación de modelos (Transaction, Budget)
+- Creación de conexión de base de datos
 
-### 5. Context Manager Pattern
-- Database connection cleanup
-- Ensures resources are released
+### 5. Patrón Context Manager
+- Limpieza de conexión de base de datos
+- Garantiza liberación de recursos
 
-### 6. Validator Pattern
-- Centralized validation
-- Reusable validators
-- Clear error messages
+### 6. Patrón Validator
+- Validación centralizada
+- Validadores reutilizables
+- Mensajes de error claros
 
-## Testing Strategy
+## Estrategia de Testing
 
-### Unit Tests
+### Pruebas Unitarias
 
 ```
 budgetcli/tests/
-├── test_validators.py      # Validation logic
-├── test_calculations.py    # Financial calculations
-├── test_services.py        # Service operations
-└── test_exporters.py       # Export functionality
+├── test_validators.py      # Lógica de validación
+├── test_calculations.py    # Cálculos financieros
+├── test_services.py        # Operaciones de servicio
+└── test_exporters.py       # Funcionalidad de exportación
 ```
 
-**Coverage:** >80%
+**Cobertura:** >80%
 
-**Key Testing Principles:**
-- Test in isolation (no external dependencies)
-- Use temporary databases for DB tests
-- Mock external services
-- Test happy path and error cases
+**Principios Clave de Testing:**
+- Testear en aislamiento (sin dependencias externas)
+- Usar bases de datos temporales para pruebas DB
+- Mockear servicios externos
+- Testear casos feliz y de error
 
-### Integration Tests
+### Pruebas de Integración
 
-- Done through service tests
-- Use temporary database
-- Test full workflows
+- Hechas a través de pruebas de servicio
+- Usar base de datos temporal
+- Testear workflows completos
 
-## Extension Points
+## Puntos de Extensión
 
-### Adding New Export Format
+### Añadir Nuevo Formato de Exportación
 
 ```python
 class XMLExporter(BaseExporter):
     def export_transactions(self, transactions):
-        # Implement XML export
+        # Implementar exportación XML
         pass
 ```
 
-### Adding New Command
+### Añadir Nuevo Comando
 
 ```python
-# In cli/budgets.py or new file
+# En cli/budgets.py o archivo nuevo
 @app.command("list-by-spent")
 def list_budgets_by_spent():
-    # Implement new command
+    # Implementar nuevo comando
     pass
 ```
 
-### Adding New Calculation
+### Añadir Nuevo Cálculo
 
 ```python
-# In core/calculations.py
+# En core/calculations.py
 @staticmethod
 def calculate_annual_summary(transactions, year):
-    # Implement new calculation
+    # Implementar nuevo cálculo
     pass
 ```
 
-## Dependency Management
+## Gestión de Dependencias
 
-### Internal Dependencies
+### Dependencias Internas
 
 ```
-CLI Layer
+Capa CLI
   ↓↓↓
-Core Services ↔ Core Validators ↔ Core Calculations
+Servicios Core ↔ Validadores Core ↔ Cálculos Core
   ↓↓↓
-Database Connection ↔ Database Models
+Conexión de BD ↔ Modelos de BD
 ```
 
-**Rule:** No circular dependencies allowed
+**Regla:** No se permiten dependencias circulares
 
-### External Dependencies
+### Dependencias Externas
 
-| Layer | Dependencies |
-|-------|--------------|
+| Capa | Dependencias |
+|------|--------------|
 | CLI | Typer, Rich |
 | Core | Pydantic |
-| Database | sqlite3 |
-| Utils | matplotlib (optional) |
+| Base de Datos | sqlite3 |
+| Utils | matplotlib (opcional) |
 
-## Performance Considerations
+## Consideraciones de Rendimiento
 
-### Database Optimization
+### Optimización de Base de Datos
 
-- Indices on frequently filtered columns (date, category, type)
-- Normalized schema
-- Connection pooling ready
+- Índices en columnas frecuentemente filtradas (date, category, type)
+- Esquema normalizado
+- Connection pooling listo
 
-### Caching Opportunities
+### Oportunidades de Caché
 
-- Monthly calculations (can cache)
-- Budget lookups (small dataset)
-- Category list (static during session)
+- Cálculos mensuales (se pueden cachear)
+- Búsquedas de presupuesto (conjunto pequeño)
+- Lista de categorías (estática durante sesión)
 
-### Query Optimization
+### Optimización de Consultas
 
-- Filter at database level when possible
-- Limit results when appropriate
-- Use indices effectively
+- Filtrar a nivel de base de datos cuando sea posible
+- Limitar resultados cuando sea apropiado
+- Usar índices efectivamente
 
-## Security Considerations
+## Consideraciones de Seguridad
 
-- SQL injection prevention (parameterized queries)
-- Input validation (centralized)
-- No hardcoded credentials
-- Environment variable support for database path
+- Prevención de inyección SQL (consultas parametrizadas)
+- Validación de entrada (centralizada)
+- Sin credenciales hardcodeadas
+- Soporte para variables de entorno para ruta de BD
 
-## Future Architecture Changes
+## Cambios de Arquitectura Futuros
 
-### Planned Improvements
+### Mejoras Planeadas
 
-1. **Database Abstraction Layer**
-   - Support multiple database backends
-   - Migration tools
+1. **Capa de Abstracción de Base de Datos**
+   - Soportar múltiples backends de BD
+   - Herramientas de migración
 
-2. **Event System**
-   - Business events (TransactionAdded, BudgetExceeded)
-   - Event listeners/subscribers
+2. **Sistema de Eventos**
+   - Eventos de negocio (TransactionAdded, BudgetExceeded)
+   - Escuchadores/suscriptores de eventos
 
-3. **Plugin System**
-   - Custom exporters
-   - Custom calculators
+3. **Sistema de Plugins**
+   - Exportadores personalizados
+   - Calculadores personalizados
 
-4. **Caching Layer**
-   - Redis support (optional)
-   - In-memory cache
+4. **Capa de Caché**
+   - Soporte Redis (opcional)
+   - Caché en memoria
 
-5. **API Layer**
-   - REST API (optional)
-   - GraphQL support (future)
+5. **Capa API**
+   - API REST (opcional)
+   - Soporte GraphQL (futuro)
 
-## Conclusion
+## Conclusión
 
-BudgetCLI's architecture prioritizes:
-- **Maintainability** through clear separation of concerns
-- **Testability** through dependency injection
-- **Scalability** through modular design
-- **Extensibility** through well-defined interfaces
-- **Clarity** through comprehensive documentation
+La arquitectura de BudgetCLI prioriza:
+- **Mantenibilidad** mediante separación clara de responsabilidades
+- **Testeabilidad** mediante inyección de dependencias
+- **Escalabilidad** mediante diseño modular
+- **Extensibilidad** mediante interfaces bien definidas
+- **Claridad** mediante documentación comprensiva
 
-This ensures the codebase can grow while remaining manageable and understandable.
+Esto garantiza que la base de código pueda crecer mientras permanece manejable y comprensible.

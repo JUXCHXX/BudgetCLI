@@ -1,130 +1,130 @@
-# Contributing to BudgetCLI
+# Contribuyendo a BudgetCLI
 
-Thank you for your interest in contributing to BudgetCLI! This document provides guidelines and instructions for contributing.
+¡Gracias por tu interés en contribuir a BudgetCLI! Este documento proporciona directrices e instrucciones para contribuir.
 
-## Code of Conduct
+## Código de Conducta
 
-Please be respectful and constructive in all interactions.
+Por favor sé respetuoso y constructivo en todas las interacciones.
 
-## Getting Started
+## Comenzar
 
-### Prerequisites
+### Requisitos Previos
 
 - Python 3.11+
 - Git
-- Familiarity with CLI applications and Python
+- Familiaridad con aplicaciones CLI y Python
 
-### Setup Development Environment
+### Configurar Entorno de Desarrollo
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/BudgetCLI.git
-cd BudgetCLI
+# Clonar el repositorio
+git clone https://github.com/tu_usuario/Budget-CLI.git
+cd Budget-CLI
 
-# Create virtual environment
+# Crear ambiente virtual
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-# Install in development mode with all dependencies
+# Instalar en modo desarrollo con todas las dependencias
 pip install -e ".[dev]"
 ```
 
-## Development Workflow
+## Flujo de Desarrollo
 
-### 1. Create a Feature Branch
+### 1. Crear una Rama de Característica
 
 ```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/your-bug-fix
+git checkout -b feature/nombre-de-tu-caracteristica
+# o
+git checkout -b fix/tu-corrección-de-bug
 ```
 
-### 2. Make Your Changes
+### 2. Realizar Cambios
 
-- Follow PEP 8 style guide
-- Keep commits focused and descriptive
-- Add tests for new functionality
-- Update documentation as needed
+- Seguir la guía de estilo PEP 8
+- Mantener commits enfocados y descriptivos
+- Añadir pruebas para nueva funcionalidad
+- Actualizar documentación según sea necesario
 
-### 3. Code Quality Checks
+### 3. Verificaciones de Calidad de Código
 
 ```bash
-# Format with black
+# Formatear con black
 black budgetcli
 
-# Lint with ruff
+# Linting con ruff
 ruff check budgetcli --fix
 
-# Type check with mypy
+# Verificación de tipos con mypy
 mypy budgetcli
 
-# Run tests
+# Ejecutar pruebas
 pytest
 
-# Run tests with coverage
+# Ejecutar pruebas con cobertura
 pytest --cov=budgetcli
 ```
 
-### 4. Commit Your Changes
+### 4. Hacer Commit de Cambios
 
 ```bash
-git commit -m "feat: add new feature" -m "Detailed description of changes"
+git commit -m "feat: agregar nueva característica" -m "Descripción detallada de cambios"
 ```
 
-Use conventional commit format:
-- `feat:` for new features
-- `fix:` for bug fixes
-- `docs:` for documentation
-- `test:` for tests
-- `refactor:` for refactoring
+Usa formato de commit convencional:
+- `feat:` para nuevas características
+- `fix:` para correcciones de bugs
+- `docs:` para documentación
+- `test:` para pruebas
+- `refactor:` para refactorización
 
-### 5. Push and Create Pull Request
+### 5. Push y Crear Pull Request
 
 ```bash
-git push origin feature/your-feature-name
+git push origin feature/nombre-de-tu-caracteristica
 ```
 
-Then create a pull request on GitHub.
+Luego crea un pull request en GitHub.
 
-## Architecture Guidelines
+## Directrices de Arquitectura
 
-### Clean Architecture Principles
+### Principios de Arquitectura Limpia
 
-1. **CLI Layer** (`budgetcli/cli/`):
-   - Only orchestrate services
-   - No business logic
-   - Handle user input/output with Rich
+1. **Capa CLI** (`budgetcli/cli/`):
+   - Solo orquestar servicios
+   - Sin lógica de negocio
+   - Manejar entrada/salida del usuario con Rich
 
-2. **Business Logic** (`budgetcli/core/`):
-   - All calculations and logic
-   - Services for domain operations
-   - Centralized validation
+2. **Lógica de Negocio** (`budgetcli/core/`):
+   - Todos los cálculos y lógica
+   - Servicios para operaciones de dominio
+   - Validación centralizada
 
-3. **Data Access** (`budgetcli/database/`):
-   - SQLite connection management
-   - Schema and models
-   - Database operations only
+3. **Acceso a Datos** (`budgetcli/database/`):
+   - Gestión de conexiones SQLite
+   - Esquema y modelos
+   - Operaciones de base de datos solamente
 
-4. **Utilities** (`budgetcli/utils/`):
-   - Export functionality
-   - Chart generation
-   - Helper functions
+4. **Utilidades** (`budgetcli/utils/`):
+   - Funcionalidad de exportación
+   - Generación de gráficos
+   - Funciones auxiliares
 
-### File Organization
+### Organización de Archivos
 
-- One service class per file
-- Clear, descriptive module names
-- Comprehensive docstrings
-- Type hints on all functions
+- Una clase de servicio por archivo
+- Nombres de módulo claros y descriptivos
+- Docstrings completos
+- Type hints en todas las funciones
 
-## Testing Requirements
+## Requisitos de Testing
 
-- Minimum 80% code coverage
-- Unit tests for all service methods
-- Validation tests for all validators
-- Test edge cases and error conditions
+- Mínimo 80% de cobertura de código
+- Pruebas unitarias para todos los métodos de servicio
+- Pruebas de validación para todos los validadores
+- Testear casos extremos y condiciones de error
 
-### Writing Tests
+### Escribir Pruebas
 
 ```python
 # budgetcli/tests/test_feature.py
@@ -133,28 +133,28 @@ from budgetcli.core.services import SomeService
 
 @pytest.fixture
 def temp_db():
-    """Setup temporary database."""
+    """Configurar base de datos temporal."""
     with tempfile.TemporaryDirectory() as tmpdir:
         init_db(str(Path(tmpdir) / "test.db"))
         yield str(Path(tmpdir) / "test.db")
 
 def test_feature_success(temp_db):
-    """Test successful operation."""
+    """Testear operación exitosa."""
     service = SomeService(temp_db)
     result = service.do_something()
     assert result is not None
 
 def test_feature_error():
-    """Test error handling."""
+    """Testear manejo de errores."""
     with pytest.raises(ValidationError):
         service.do_something_invalid()
 ```
 
-## Documentation
+## Documentación
 
-### Docstring Format
+### Formato de Docstring
 
-Use Google-style docstrings:
+Usar docstrings estilo Google:
 
 ```python
 def add_transaction(
@@ -165,89 +165,89 @@ def add_transaction(
     note: str = "",
 ) -> Transaction:
     """
-    Add a new transaction.
+    Añadir una nueva transacción.
 
     Args:
-        transaction_type: Type of transaction (income/expense).
-        category: Category name.
-        amount: Transaction amount.
-        date: Date in ISO format (YYYY-MM-DD).
-        note: Optional transaction note.
+        transaction_type: Tipo de transacción (income/expense).
+        category: Nombre de la categoría.
+        amount: Monto de la transacción.
+        date: Fecha en formato ISO (YYYY-MM-DD).
+        note: Nota opcional de la transacción.
 
     Returns:
-        Created transaction object.
+        Objeto de transacción creado.
 
     Raises:
-        ValidationError: If validation fails.
-        RepositoryException: If database operation fails.
+        ValidationError: Si la validación falla.
+        RepositoryException: Si la operación de base de datos falla.
     """
 ```
 
-### Update README
+### Actualizar README
 
-If adding features, update:
-- Feature list
-- Usage examples
-- Architecture diagram (if applicable)
+Si añades características, actualiza:
+- Lista de características
+- Ejemplos de uso
+- Diagrama de arquitectura (si aplica)
 
-## Common Issues
+## Problemas Comunes
 
-### Database Errors
+### Errores de Base de Datos
 
 ```bash
-# Reset database during development
+# Resetear base de datos durante desarrollo
 python -c "from budgetcli.database import reset_db; reset_db()"
 ```
 
-### Import Errors
+### Errores de Importación
 
 ```bash
-# Reinstall in development mode
+# Reinstalar en modo desarrollo
 pip install -e "."
 ```
 
-### Test Failures
+### Fallos en Pruebas
 
 ```bash
-# Clear Python cache
+# Limpiar caché de Python
 find . -type d -name __pycache__ -exec rm -r {} +
 pytest --cache-clear
 ```
 
-## Performance Considerations
+## Consideraciones de Rendimiento
 
-- Minimize database queries
-- Use indices for frequently filtered columns
-- Cache calculations when appropriate
-- Profile slow operations
+- Minimizar consultas de base de datos
+- Usar índices para columnas frecuentemente filtradas
+- Cachear cálculos cuando sea apropiado
+- Perfilar operaciones lentas
 
-## Security
+## Seguridad
 
-- Validate all user input
-- Use parameterized queries (done via SQLite adapters)
-- Don't store sensitive data in plain text
-- Keep dependencies updated
+- Validar todas las entradas del usuario
+- Usar consultas parametrizadas (hecho a través de adaptadores SQLite)
+- No almacenar datos sensibles en texto plano
+- Mantener dependencias actualizadas
 
-## Release Checklist
+## Lista de Verificación para Lanzamiento
 
-- [ ] All tests passing
-- [ ] Code coverage ≥ 80%
-- [ ] Documentation updated
-- [ ] CHANGELOG updated
-- [ ] Version bumped (semantic versioning)
-- [ ] Tag created: `git tag v1.0.0`
+- [ ] Todas las pruebas pasando
+- [ ] Cobertura de código ≥ 80%
+- [ ] Documentación actualizada
+- [ ] CHANGELOG actualizado
+- [ ] Versión bumped (versionamiento semántico)
+- [ ] Tag creado: `git tag v1.0.0`
 
-## Questions?
+## ¿Preguntas?
 
-- Check existing issues and discussions
-- Create a new discussion for questions
-- Review existing code for patterns
+- Revisa issues y discusiones existentes
+- Crea una nueva discusión para preguntas
+- Revisa código existente para patrones
 
-## Recognition
+## Reconocimiento
 
-Contributors will be recognized in:
+Los contribuidores serán reconocidos en:
 - CONTRIBUTORS.md
-- GitHub contributors page
-- Release notes
+- Página de contribuidores de GitHub
+- Notas de lanzamiento
 
-Thank you for contributing! 🎉
+¡Gracias por contribuir! 🎉
