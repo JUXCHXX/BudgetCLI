@@ -20,6 +20,7 @@ from budgetcli.cli.tui_utils import (
     print_header,
     wait_for_continue,
 )
+from budgetcli.database import init_db
 
 console = Console()
 
@@ -149,6 +150,9 @@ def handle_exit() -> None:
 def start_tui() -> None:
     """Start the TUI application."""
     try:
+        # Initialize database if needed
+        init_db()
+
         # Play opening animation
         animate_opening()
 
