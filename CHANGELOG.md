@@ -5,6 +5,40 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato se basa en [Mantener un Changelog](https://keepachangelog.com/es/1.0.0/),
 y este proyecto adhiere a [Versionamiento Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.2] - 2026-04-17
+
+### Agregado
+
+- **Interfaz TUI Interactiva**: Nueva experiencia de usuario completamente interactiva desde la terminal
+- **Comando `budget start`**: Nuevo comando para lanzar la interfaz interactiva
+- **Animación de Apertura**: Animación ASCII con barra de progreso al iniciar la TUI
+- **Menú Principal Interactivo**: Navegación con flechas y Enter para todas las opciones
+- **Submenú Transacciones**: Agregar ingresos/gastos, ver historial, eliminar con interfaz visual
+- **Submenú Presupuestos**: Definir, ver y eliminar presupuestos con indicador de % usado
+- **Submenú Reportes**: Reportes mensuales, resumen financiero, exportación CSV/JSON
+- **Submenú Configuración**: Ver ruta de BD, hacer backups, información de la app
+- **Sistema de Navegación Global**: Stack de navegación para "Volver" entre menús
+
+### Cambios
+
+- Versión actualizada a 0.0.2
+- Dependencia `questionary>=2.0.0` agregada para menús interactivos
+
+### Archivos
+
+- `budgetcli/cli/tui.py` - Módulo principal de TUI con animación y menú
+- `budgetcli/cli/tui_menus.py` - Implementación de todos los submenús
+- `budgetcli/cli/tui_utils.py` - Utilidades y helpers para la TUI
+- `budgetcli/tests/test_tui.py` - Suite de pruebas para TUI
+
+### Compatibilidad
+
+- Todos los comandos CLI existentes siguen funcionando normalmente
+- La TUI es una capa adicional que no afecta la interfaz de línea de comandos tradicional
+- Tests existentes permanecen en 40/40 passing con cobertura >80%
+
+---
+
 ## [1.0.0] - 2026-04-15
 
 ### Agregado

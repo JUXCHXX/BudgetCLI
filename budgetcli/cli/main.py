@@ -21,6 +21,18 @@ app.add_typer(reports.app, name="report", help="View reports and summaries")
 
 
 @app.command()
+def start() -> None:
+    """Launch interactive TUI (Text User Interface)."""
+    try:
+        from budgetcli.cli.tui import start_tui
+
+        start_tui()
+    except Exception as e:
+        console.print(f"[red]✗ Error launching TUI: {e}[/red]")
+        raise typer.Exit(code=1)
+
+
+@app.command()
 def init() -> None:
     """Initialize database with schema."""
     try:
