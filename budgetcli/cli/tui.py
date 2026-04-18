@@ -31,38 +31,37 @@ def animate_opening() -> None:
     # ASCII art frames for BudgetCLI logo
     frames = [
         """
-╔═══════════════════════════════════╗
-║                                   ║
-║   ████████  ██    ██ ██████████   ║
-║   ██        ██ ██ ██       ██     ║
-║   ████████  ██ ██ ██       ██     ║
-║   ██        ██    ██       ██     ║
-║   ██        ██    ██       ██     ║
-║                                   ║
-║        BudgetCLI v0.0.2          ║
-║                                   ║
-╚═══════════════════════════════════╝
+╔═══════════════════════════════════════════════════╗
+║                                                   ║
+║    [B]  [U]  [D]  [G]  [E]  [T]  [C]  [L]  [I]   ║
+║     █   █   █    █    █    █    █    █    █     ║
+║     █   █   █    █    █    █    █    █    █     ║
+║                                                   ║
+║              BudgetCLI v0.0.2                    ║
+║                                                   ║
+║         Gestor de Finanzas Personales             ║
+║                                                   ║
+╚═══════════════════════════════════════════════════╝
         """,
         """
-╔═══════════════════════════════════╗
-║ ▓▓▓▓▓▓▓▓  ▓▓    ▓▓ ▓▓▓▓▓▓▓▓▓▓   ║
-║ ▓▓        ▓▓ ▓▓ ▓▓       ▓▓     ║
-║ ▓▓▓▓▓▓▓▓  ▓▓ ▓▓ ▓▓       ▓▓     ║
-║ ▓▓        ▓▓    ▓▓       ▓▓     ║
-║ ▓▓        ▓▓    ▓▓       ▓▓     ║
-║ ▒▒▒▒▒▒▒▒  ▒▒    ▒▒ ▒▒▒▒▒▒▒▒▒▒   ║
-║ ░░░░░░░░  ░░    ░░ ░░░░░░░░░░   ║
-║                                   ║
-║        BudgetCLI v0.0.2          ║
-║                                   ║
-╚═══════════════════════════════════╝
+╔═══════════════════════════════════════════════════╗
+║                                                   ║
+║    [B]  [U]  [D]  [G]  [E]  [T]  [C]  [L]  [I]   ║
+║     ███ ███ ███ ███ ███ ███ ███ ███ ███          ║
+║     ███ ███ ███ ███ ███ ███ ███ ███ ███          ║
+║                                                   ║
+║              BudgetCLI v0.0.2                    ║
+║                                                   ║
+║         Gestor de Finanzas Personales             ║
+║                                                   ║
+╚═══════════════════════════════════════════════════╝
         """,
     ]
 
     # Animate logo frames
     for frame in frames:
-        console.print(Align.center(frame), style="cyan")
-        time.sleep(0.4)
+        console.print(Align.center(frame), style="cyan bold")
+        time.sleep(0.5)
         clear_screen()
 
     # Progress bar animation
@@ -110,7 +109,6 @@ def show_main_menu() -> None:
         choices=choices,
         pointer="➤ ",
         use_shortcuts=False,
-        use_pointer=True,
     ).ask()
 
     if selected is None:

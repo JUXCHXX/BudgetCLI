@@ -62,7 +62,6 @@ def transactions_menu() -> None:
         choices=choices,
         pointer="➤ ",
         use_shortcuts=False,
-        use_pointer=True,
     ).ask()
 
     if selected is None or selected == "back":
@@ -355,7 +354,6 @@ def budgets_menu() -> None:
         choices=choices,
         pointer="➤ ",
         use_shortcuts=False,
-        use_pointer=True,
     ).ask()
 
     if selected is None or selected == "back":
@@ -547,7 +545,6 @@ def reports_menu() -> None:
         choices=choices,
         pointer="➤ ",
         use_shortcuts=False,
-        use_pointer=True,
     ).ask()
 
     if selected is None or selected == "back":
@@ -722,7 +719,6 @@ def configuration_menu() -> None:
         choices=choices,
         pointer="➤ ",
         use_shortcuts=False,
-        use_pointer=True,
     ).ask()
 
     if selected is None or selected == "back":
