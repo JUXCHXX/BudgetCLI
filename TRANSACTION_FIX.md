@@ -76,7 +76,7 @@ def start_tui() -> None:
     try:
         # Initialize database if needed
         init_db()  # ← AGREGADO
-        
+
         # Play opening animation
         animate_opening()
         ...

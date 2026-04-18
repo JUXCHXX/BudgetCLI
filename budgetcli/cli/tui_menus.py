@@ -67,13 +67,13 @@ def transactions_menu() -> None:
     if selected is None or selected == "back":
         nav_stack.go_back()
     elif selected == "add_income":
-        add_transaction_flow(TransactionType.INCOME.value)
+        nav_stack.push(lambda: add_transaction_flow(TransactionType.INCOME.value))
     elif selected == "add_expense":
-        add_transaction_flow(TransactionType.EXPENSE.value)
+        nav_stack.push(lambda: add_transaction_flow(TransactionType.EXPENSE.value))
     elif selected == "view_history":
-        view_transaction_history()
+        nav_stack.push(view_transaction_history)
     elif selected == "delete":
-        delete_transaction()
+        nav_stack.push(delete_transaction)
 
 
 def add_transaction_flow(transaction_type: str) -> None:
@@ -359,11 +359,11 @@ def budgets_menu() -> None:
     if selected is None or selected == "back":
         nav_stack.go_back()
     elif selected == "set":
-        set_budget()
+        nav_stack.push(set_budget)
     elif selected == "view":
-        view_budgets()
+        nav_stack.push(view_budgets)
     elif selected == "delete":
-        delete_budget()
+        nav_stack.push(delete_budget)
 
 
 def set_budget() -> None:
@@ -535,6 +535,7 @@ def reports_menu() -> None:
     choices = [
         questionary.Choice("Reporte mensual", value="monthly"),
         questionary.Choice("Resumen financiero", value="summary"),
+        questionary.Choice("Exportar gráfico (PNG)", value="png"),
         questionary.Choice("Exportar datos (CSV)", value="csv"),
         questionary.Choice("Exportar datos (JSON)", value="json"),
         questionary.Choice("← Volver", value="back"),
@@ -550,13 +551,15 @@ def reports_menu() -> None:
     if selected is None or selected == "back":
         nav_stack.go_back()
     elif selected == "monthly":
-        monthly_report()
+        nav_stack.push(monthly_report)
     elif selected == "summary":
-        financial_summary()
+        nav_stack.push(financial_summary)
+    elif selected == "png":
+        nav_stack.push(export_chart_png)
     elif selected == "csv":
-        export_data("csv")
+        nav_stack.push(lambda: export_data("csv"))
     elif selected == "json":
-        export_data("json")
+        nav_stack.push(lambda: export_data("json"))
 
 
 def monthly_report() -> None:
@@ -650,6 +653,61 @@ def financial_summary() -> None:
         nav_stack.go_back()
 
 
+def export_chart_png() -> None:
+    """Export monthly expenses chart as PNG."""
+    clear_screen()
+    print_header()
+    console.print()
+
+    try:
+        from budgetcli.utils.exporters import PNGExporter
+
+        # Get current month
+        year = datetime.now().year
+        month = datetime.now().month
+
+        # Get transactions
+        service = TransactionService()
+        transactions = service.get_transactions_by_month(year, month)
+
+        if not transactions:
+            print_info("No hay transacciones en este mes para generar gráfico.")
+            wait_for_continue()
+            nav_stack.go_back()
+            return
+
+        # Calculate totals by category for expenses only
+        expenses_by_category = {}
+        for t in transactions:
+            if t.type.value == "expense":
+                if t.category not in expenses_by_category:
+                    expenses_by_category[t.category] = 0
+                expenses_by_category[t.category] += t.amount
+
+        if not expenses_by_category:
+            print_info("No hay gastos en este mes para generar gráfico.")
+            wait_for_continue()
+            nav_stack.go_back()
+            return
+
+        # Export chart
+        exporter = PNGExporter()
+        filepath = exporter.export_bar_chart(
+            expenses_by_category,
+            title=f"Gastos por Categoría - {year}-{month:02d}",
+            ylabel="Monto ($)"
+        )
+
+        print_success(f"Gráfico exportado a:\n[cyan]{filepath}[/cyan]")
+        wait_for_continue()
+        nav_stack.go_back()
+
+    except Exception as e:
+        print_error(f"Error durante exportación de gráfico: {e}")
+        wait_for_continue()
+        nav_stack.go_back()
+
+
 def export_data(format_type: str) -> None:
     """
     Export data to file.
@@ -724,11 +782,11 @@ def configuration_menu() -> None:
     if selected is None or selected == "back":
         nav_stack.go_back()
     elif selected == "db_path":
-        show_db_path()
+        nav_stack.push(show_db_path)
     elif selected == "backup":
-        make_backup()
+        nav_stack.push(make_backup)
     elif selected == "about":
-        show_about()
+        nav_stack.push(show_about)
 
 
 def show_db_path() -> None:
